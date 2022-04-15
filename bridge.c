@@ -35,15 +35,15 @@ ALuint buffers[BUF_COUNT];
 
 void fill_buffer(ALuint buffer)
 {
-    const int audioFreq = 440;
+    const int audioFreq = 441;
     const int sampleRate = 44100;
     const int bufLen = sampleRate / 2;
-    short buf[bufLen];
+    signed char buf[bufLen];
 
     for (int i = 0; i < bufLen; i++)
     {
-        float t = i / (float)audioFreq;
-        buf[i] = (short)(sinf(2 * M_PI * audioFreq * t) * 127.0);
+        float t = i / (float)sampleRate;
+        buf[i] = (signed char)(sinf(2 * M_PI * audioFreq * t) * 30.0);
     }
 
     alBufferData(buffer, AL_FORMAT_MONO8, buf, sizeof(buf), sampleRate);
@@ -55,6 +55,7 @@ void audio_loop(void)
 
     int processed;
     alGetSourcei(source, AL_BUFFERS_PROCESSED, &processed);
+    printf("%d\n", processed);
     while (processed > 0)
     {
         ALuint buffer;
@@ -89,20 +90,12 @@ int main()
     ALfloat listenerPos[] = {0.0, 0.0, 1.0};
     ALfloat listenerVel[] = {0.0, 0.0, 0.0};
     ALfloat listenerOri[] = {0.0, 0.0, -1.0, 0.0, 1.0, 0.0};
+    ALfloat listenerGain = 0.1;
 
     alListenerfv(AL_POSITION, listenerPos);
     alListenerfv(AL_VELOCITY, listenerVel);
     alListenerfv(AL_ORIENTATION, listenerOri);
-
-    // check getting and setting global gain
-    ALfloat volume;
-    alGetListenerf(AL_GAIN, &volume);
-    assert(volume == 1.0);
-    alListenerf(AL_GAIN, 0.0);
-    alGetListenerf(AL_GAIN, &volume);
-    assert(volume == 0.0);
-
-    alListenerf(AL_GAIN, 1.0); // reset gain to default
+    alListenerf(AL_GAIN, listenerGain);
 
     // prepare buffers
     alGenBuffers(BUF_COUNT, buffers);
