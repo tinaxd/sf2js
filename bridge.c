@@ -15,13 +15,14 @@ tsf *load_sf2(const char *filename)
 EMSCRIPTEN_KEEPALIVE
 void init_output(tsf *f)
 {
-    tsf_set_output(f, TSF_MONO, 44100, 0);
+    tsf_set_output(f, TSF_STEREO_UNWEAVED, 44100, 0);
 }
 
 EMSCRIPTEN_KEEPALIVE
 void note_on(tsf *f, int chan, int key, float velocity)
 {
     tsf_note_on(f, chan, key, velocity);
+    // printf("chan %d key %d velocity %f\n", chan, key, velocity);
 }
 
 EMSCRIPTEN_KEEPALIVE
@@ -34,6 +35,7 @@ EMSCRIPTEN_KEEPALIVE
 void render_float(tsf *f, float *buf, int samples)
 {
     tsf_render_float(f, buf, samples, 0);
+    // printf("render_float buf %p samples %d\n", buf, samples);
 }
 
 EMSCRIPTEN_KEEPALIVE

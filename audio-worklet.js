@@ -28,7 +28,7 @@ class TSFProcessor extends AudioWorkletProcessor {
                     chan[i] = floatBuf[i];
                     sum += floatBuf[i];
                 }
-                console.log(sum);
+                // console.log(sum);
             }
         });
         return true;
