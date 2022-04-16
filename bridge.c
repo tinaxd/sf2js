@@ -15,7 +15,7 @@ tsf *load_sf2(const char *filename)
 EMSCRIPTEN_KEEPALIVE
 void init_output(tsf *f)
 {
-    tsf_set_output(f, TSF_STEREO_UNWEAVED, 44100, 0);
+    tsf_set_output(f, TSF_STEREO_UNWEAVED, 48000, 0);
 }
 
 EMSCRIPTEN_KEEPALIVE

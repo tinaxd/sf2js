@@ -25,16 +25,34 @@ window.addEventListener('load', () => {
         if (ev.data.type === 'finish-loading') {
             console.log('finish-loading');
             workerReady = true;
-            setInterval(() => {
-                worker.postMessage({
-                    type: 'note-on',
-                    key: 60,
-                    vel: 1.0
-                });
-            }, 1000);
+            // setInterval(() => {
+            //     worker.postMessage({
+            //         type: 'note-on',
+            //         key: 60,
+            //         vel: 1.0
+            //     });
+            // }, 1000);
         }
     };
     document.body.addEventListener('click', async () => {
         await initAudio();
+    });
+
+    const buttons = document.querySelectorAll('.piano');
+    buttons.forEach((btn) => {
+        btn.addEventListener('click', (ev) => {
+            const key = Number(ev.target.getAttribute('x-key'));
+            worker.postMessage({
+                type: 'note-on',
+                key: key,
+                vel: 1.0
+            });
+            setTimeout(() => {
+                worker.postMessage({
+                    type: 'note-off',
+                    key: key
+                });
+            }, 500);
+        });
     });
 });
