@@ -2,4 +2,5 @@
 /a.out.wasm
 *.o
 *.wasm
-
+/build/
+/*.mid

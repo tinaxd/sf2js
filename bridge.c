@@ -42,10 +42,6 @@ void render_short(tsf *f, short *buf, int samples)
     tsf_render_short(f, buf, samples, 0);
 }
 
-#define BUF_COUNT 2
-ALuint sources[1];
-ALuint buffers[BUF_COUNT];
-
 tsf *SoundFont = NULL;
 
 #define key_min 69
@@ -76,36 +72,6 @@ void *random_note_on(void *ptr)
         note_on(SoundFont, chan, key, vel);
 
         emscripten_sleep(300);
-    }
-}
-
-void fill_buffer(ALuint buffer)
-{
-    const int sampleRate = 44100;
-    const int bufLen = sampleRate / 2;
-    short buf[bufLen];
-
-    render_short(SoundFont, buf, bufLen);
-
-    alBufferData(buffer, AL_FORMAT_MONO16, buf, sizeof(buf), sampleRate);
-}
-
-void audio_loop(void)
-{
-    ALuint source = sources[0];
-
-    int processed;
-    alGetSourcei(source, AL_BUFFERS_PROCESSED, &processed);
-    printf("%d\n", processed);
-    while (processed > 0)
-    {
-        ALuint buffer;
-        alSourceUnqueueBuffers(source, 1, &buffer);
-
-        fill_buffer(buffer);
-        alSourceQueueBuffers(source, 1, &buffer);
-
-        processed--;
     }
 }
 
